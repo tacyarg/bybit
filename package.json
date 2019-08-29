@@ -1,0 +1,10 @@
+{
+  "name": "bybit",
+  "version": "1.0.0",
+  "description": "Simple and easy to use bybit.com client.",
+  "main": "index.js",
+  "repository": "https://github.com/tacyarg/bybit",
+  "author": "Jacob Dent <jdent@tacyarg.com>",
+  "license": "MIT",
+  "private": false
+}
