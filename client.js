@@ -34,24 +34,7 @@ module.exports = ({ key, secret }) => {
 
   return {
     listOpenPositions() {
-      return call.get('position', {
-        filter: { symbol: 'XBTUSD' },
-        columns: ['currentQty', 'avgEntryPrice'],
-      })
-    },
-    createLimitOrder(qty, price) {
-      return call.post('order', {
-        symbol: 'XBTUSD',
-        orderQty: qty,
-        price: price,
-      })
-    },
-    createStopOrder(qty, price) {
-      return call.post('order', {
-        symbol: 'XBTUSD',
-        orderQty: qty,
-        stopPx: price,
-      })
+      //TODO
     },
   }
 }

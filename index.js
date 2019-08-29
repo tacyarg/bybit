@@ -1,1 +1,1 @@
-module.exports = require('./bitmex')
+module.exports = require('./client')
