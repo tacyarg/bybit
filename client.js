@@ -21,7 +21,7 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
 
     const signedParams = qs.stringify(params)
 
-    console.log(signedParams)
+    // console.log(signedParams)
 
     let query = ''
     let postBody = null
