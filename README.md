@@ -15,8 +15,8 @@ Below is a short guide on how to use the root client.
 
 - `baseURL.testnet`: https://api-testnet.bybit.com
 - `baseURL.mainnet`: https://api.bybit.com
-- `key`
-- `secret`
+- `key`: APIKey
+- `secret`: Private Key
 
 ```js
 const client = require('bybit')({
