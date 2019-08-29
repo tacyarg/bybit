@@ -3,17 +3,44 @@ const crypto = require('crypto')
 const qs = require('qs')
 const assert = require('assert')
 
-module.exports = ({ key, secret }) => {
+module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
   assert(key, 'api key required.')
   assert(secret, 'api secret required.')
+  assert(baseURL, 'baseURL required.')
 
-  const call = function(verb, endpoint, params) {
+  const call = function(method, endpoint, params = {}) {
+    params.api_key = key
+    params.timestamp = Date.now()
 
-    const options = {
-      //TODO: prepare request
+    const paramString = qs.stringify(params)
+
+    params.sign = crypto
+      .createHmac('sha256', secret)
+      .update(paramString)
+      .digest('hex')
+
+    const signedParams = qs.stringify(params)
+
+    console.log(signedParams)
+
+    let query = ''
+    let postBody = null
+
+    if (method === 'GET') query = '?' + signedParams
+    else postBody = JSON.stringify(params)
+
+    const url = baseURL + '/open-api' + endpoint + query
+
+    const headers = {
+      'content-type': 'application/json',
+      accept: 'application/json',
     }
 
-    return fetch(url, options)
+    return fetch(url, {
+      method,
+      headers,
+      body: postBody,
+    })
       .then(response => response.json())
       .then(
         response => {
@@ -33,8 +60,9 @@ module.exports = ({ key, secret }) => {
   }
 
   return {
-    listOpenPositions() {
+    listOpenPositions(params) {
       //TODO
+      return call.get('/order/list', params)
     },
   }
 }
