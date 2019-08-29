@@ -59,7 +59,9 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
     return call('GET', endpoint, params)
   }
 
+  
   return {
+    ...call,
     listOpenPositions(params) {
       //TODO
       return call.get('/order/list', params)
