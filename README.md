@@ -56,7 +56,7 @@ client
 
 ```js
 client
-  .etOrder('order_id')
+  .getOrder('order_id')
   .then(console.log)
   .catch(console.error)
 ```
