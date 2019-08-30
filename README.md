@@ -37,6 +37,8 @@ client
 
 ## Interface
 
+Methods privided by the client.
+
 ### listOrders
 
 > List your orders.
