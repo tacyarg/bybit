@@ -37,7 +37,7 @@ client
 
 ## Interface
 
-Methods privided by the client.
+Methods provided by the client.
 
 ### listOrders
 
