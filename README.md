@@ -34,3 +34,112 @@ client
   .then(console.log)
   .catch(console.error)
 ```
+
+## Interface
+
+### listOrders
+
+> List your orders.
+
+```js
+client
+  .listOrders()
+  .then(console.log)
+  .catch(console.error)
+```
+
+### getOrder
+
+> Get a previously created order.
+
+```js
+client
+  .etOrder('order_id')
+  .then(console.log)
+  .catch(console.error)
+```
+
+### cancelOrder
+
+> Canel a previously created order.
+
+```js
+client
+  .cancelOrder('order_id')
+  .then(console.log)
+  .catch(console.error)
+```
+
+### createOrder
+
+> Create a new order.
+
+```js
+client
+  .createOrder({
+    side: 'Buy',
+    symbol: 'BTCUSD',
+    order_type: 'Limit',
+    time_in_force: 'GoodTillCancel',
+    price: 10000,
+    qty: 100000,
+  })
+  .then(console.log)
+  .catch(console.error)
+```
+
+### limitBuy
+
+> Create a new Limit Buy
+
+- `price` - Order Price
+- `qty` - Number of Contracts
+
+```js
+client
+  .limitBuy(price, qty)
+  .then(console.log)
+  .catch(console.error)
+```
+
+### limitSell
+
+> Create a new Limit Sell
+
+- `price` - Order Price
+- `qty` - Number of Contracts
+
+```js
+client
+  .limitSell(price, qty)
+  .then(console.log)
+  .catch(console.error)
+```
+
+### marketBuy
+
+> Create a new Market Buy
+
+- `price` - Order Price
+- `qty` - Number of Contracts
+
+```js
+client
+  .marketBuy(price, qty)
+  .then(console.log)
+  .catch(console.error)
+```
+
+### marketSell
+
+> Create a new Market Sell
+
+- `price` - Order Price
+- `qty` - Number of Contracts
+
+```js
+client
+  .marketSell(price, qty)
+  .then(console.log)
+  .catch(console.error)
+```

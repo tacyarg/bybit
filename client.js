@@ -41,13 +41,13 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
       headers,
       body: postBody,
     })
-      .then(response => response.json())
+      .then(r => r.json())
       .then(
-        response => {
-          if ('error' in response) throw new Error(response.error.message)
-          return response
+        r => {
+          // if ('error' in r) throw new Error(r.error.message)
+          return r.result
         },
-        error => console.error('Network error', error)
+        e => console.error('Network error', e)
       )
   }
 
@@ -59,12 +59,80 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
     return call('GET', endpoint, params)
   }
 
-  
+  const createOrder = ({
+    side = 'Buy',
+    symbol = 'BTCUSD',
+    order_type = 'Limit',
+    time_in_force = 'GoodTillCancel',
+    price = null,
+    qty = null,
+  }) => {
+    assert(price, 'price required.')
+    assert(qty, 'qty required.')
+
+    return call.get('/order/create', params)
+  }
+
   return {
     ...call,
-    listOpenPositions(params) {
+    listOrders(params) {
       //TODO
       return call.get('/order/list', params)
+    },
+    getOrder(id) {
+      assert(id, 'id required')
+
+      return call.get('/order/list', {
+        order_id: id, 
+        order_link_id: id
+      }).then(r => {
+        assert(r.data[0], 'invalid order id')
+        return r.data[0]
+      })
+    },
+    cancelOrder(id) {
+      assert(id, 'id required')
+
+      return call.post('/order/cancel', {
+        order_id: id
+      })
+    },
+    createOrder,
+    limitBuy(price, qty, options = {}) {
+      return createOrder({
+        price,
+        qty,
+        ...options,
+        side = 'Buy',
+        order_type = 'Limit',
+      })
+    },
+    limitSell(price, qty, options = {}) {
+      return createOrder({
+        price,
+        qty,
+        ...options,
+        side = 'Sell',
+        order_type = 'Limit',
+      })
+    },
+    marketBuy(price, qty, options ={}) {
+      return createOrder({
+        price,
+        qty,
+        ...options,
+        side = 'Buy',
+        order_type = 'Market',
+      })
+    },
+    marketSell(price, qty, options={}) {
+      return createOrder({
+        price,
+        qty,
+        ...options,
+        side = 'Sell',
+        order_type = 'Market',
+      })
     },
   }
 }
