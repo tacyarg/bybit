@@ -92,7 +92,7 @@ client
 
 ### limitBuy
 
-> Create a new Limit Buy
+> Create a limit buy order.
 
 - `price` - Order Price
 - `qty` - Number of Contracts
@@ -106,7 +106,7 @@ client
 
 ### limitSell
 
-> Create a new Limit Sell
+> Create a limit sell order.
 
 - `price` - Order Price
 - `qty` - Number of Contracts
@@ -120,7 +120,7 @@ client
 
 ### marketBuy
 
-> Create a new Market Buy
+> Create a market buy order.
 
 - `price` - Order Price
 - `qty` - Number of Contracts
@@ -134,7 +134,7 @@ client
 
 ### marketSell
 
-> Create a new Market Sell
+> Create a market sell order.
 
 - `price` - Order Price
 - `qty` - Number of Contracts
