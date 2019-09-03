@@ -122,7 +122,6 @@ client
 
 > Create a market buy order.
 
-- `price` - Order Price
 - `qty` - Number of Contracts
 
 ```js
@@ -136,7 +135,6 @@ client
 
 > Create a market sell order.
 
-- `price` - Order Price
 - `qty` - Number of Contracts
 
 ```js

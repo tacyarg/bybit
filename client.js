@@ -116,18 +116,18 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
         order_type = 'Limit',
       })
     },
-    marketBuy(price, qty, options ={}) {
+    marketBuy(qty, options ={}) {
       return createOrder({
-        price,
+        // price,
         qty,
         ...options,
         side = 'Buy',
         order_type = 'Market',
       })
     },
-    marketSell(price, qty, options={}) {
+    marketSell(qty, options={}) {
       return createOrder({
-        price,
+        // price,
         qty,
         ...options,
         side = 'Sell',
