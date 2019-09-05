@@ -5,6 +5,6 @@ const api = require('.')(config.bybit)
 const assert = require('assert')
 
 api
-  .listOpenPositions()
+  .listTickers()
   .then(console.log)
   .catch(console.error)

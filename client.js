@@ -29,7 +29,7 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
     if (method === 'GET') query = '?' + signedParams
     else postBody = JSON.stringify(params)
 
-    const url = baseURL + '/open-api' + endpoint + query
+    const url = baseURL + endpoint + query
 
     const headers = {
       'content-type': 'application/json',
@@ -70,7 +70,7 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
     assert(price, 'price required.')
     assert(qty, 'qty required.')
 
-    return call.get('/order/create', params)
+    return call.get('/open-api/order/create', params)
   }
 
   const createConditionalOrder = ({
@@ -88,32 +88,34 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
     assert(base_price, 'base_price required.')
     assert(stop_px, 'stop_px required.')
 
-    return call.get('/stop-order/create', params)
+    return call.get('/open-api/stop-order/create', params)
   }
 
   return {
     ...call,
     listActiveOrders(params) {
       //TODO
-      return call.get('/order/list', params)
+      return call.get('/open-api/order/list', params)
     },
-    getActiveOrder(id, options ={}) {
+    getActiveOrder(id, options = {}) {
       assert(id, 'id required')
 
-      return call.get('/order/list', {
-        order_id: id, 
-        order_link_id: id,
-        ...options
-      }).then(r => {
-        assert(r.data[0], 'invalid order id')
-        return r.data[0]
-      })
+      return call
+        .get('/open-api/order/list', {
+          order_id: id,
+          order_link_id: id,
+          ...options,
+        })
+        .then(r => {
+          assert(r.data[0], 'invalid order id')
+          return r.data[0]
+        })
     },
     cancelActiveOrder(id) {
       assert(id, 'id required')
 
-      return call.post('/order/cancel', {
-        order_id: id
+      return call.post('/open-api/order/cancel', {
+        order_id: id,
       })
     },
     createOrder,
@@ -122,8 +124,8 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
         price,
         qty,
         ...options,
-        side = 'Buy',
-        order_type = 'Limit',
+        side: 'Buy',
+        order_type: 'Limit',
       })
     },
     limitSell(price, qty, options = {}) {
@@ -131,49 +133,51 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
         price,
         qty,
         ...options,
-        side = 'Sell',
-        order_type = 'Limit',
+        side: 'Sell',
+        order_type: 'Limit',
       })
     },
-    marketBuy(qty, options ={}) {
+    marketBuy(qty, options = {}) {
       return createOrder({
         // price,
         qty,
         ...options,
-        side = 'Buy',
-        order_type = 'Market',
+        side: 'Buy',
+        order_type: 'Market',
       })
     },
-    marketSell(qty, options={}) {
+    marketSell(qty, options = {}) {
       return createOrder({
         // price,
         qty,
         ...options,
-        side = 'Sell',
-        order_type = 'Market',
+        side: 'Sell',
+        order_type: 'Market',
       })
     },
     createConditionalOrder,
     listConditionalOrders(params) {
-      return call.get('/stop-order/list', params)
+      return call.get('/open-api/stop-order/list', params)
     },
     getConditionalOrder(id, options = {}) {
       assert(id, 'id required')
 
-      return call.get('/stop-order/list', {
-        order_id: id, 
-        order_link_id: id,
-        ...options
-      }).then(r => {
-        assert(r.data[0], 'invalid order id')
-        return r.data[0]
-      })
+      return call
+        .get('/open-api/stop-order/list', {
+          order_id: id,
+          order_link_id: id,
+          ...options,
+        })
+        .then(r => {
+          assert(r.data[0], 'invalid order id')
+          return r.data[0]
+        })
     },
     cancelConditionalOrder(id) {
       assert(id, 'id required')
 
-      return call.post('/stop-order/cancel', {
-        stop_order_id: id
+      return call.post('/open-api/stop-order/cancel', {
+        stop_order_id: id,
       })
     },
     listMyLeverage() {
@@ -184,10 +188,11 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
       assert(leverage, 'leverage required.')
 
       return call.post('/user/leverage/save', {
-        symbol, leverage
+        symbol,
+        leverage,
       })
     },
-    listMyPositions(){
+    listMyPositions() {
       return call.get('/position/list')
     },
     updatePositionMargin(symbol, margin) {
@@ -195,34 +200,42 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
       assert(margin, 'margin required.')
 
       return call.post('/position/change-position-margin', {
-        symbol, margin
+        symbol,
+        margin,
       })
     },
     getFundingRate(symbol = 'BTCUSD') {
       assert(symbol, 'symbol required.')
-      return call.get('/open-api/funding/prev-funding-rate', {symbol})
+      return call.get('/open-api/funding/prev-funding-rate', { symbol })
     },
     getMyFundingFee(symbol = 'BTCUSD') {
       assert(symbol, 'symbol required.')
-      return call.get('/open-api/funding/prev-funding', {symbol})
+      return call.get('/open-api/funding/prev-funding', { symbol })
     },
     getMyPredictedFunding(symbol = 'BTCUSD') {
       assert(symbol, 'symbol required.')
-      return call.get('/open-api/funding/predicted-funding', {symbol})
+      return call.get('/open-api/funding/predicted-funding', { symbol })
     },
     listOrderTrades(id) {
       assert(id, 'id required')
 
-      return call.get('/v2/private/execution/list', {order_id: id})
+      return call.get('/v2/private/execution/list', { order_id: id })
     },
     getOrderbookSnapshot(symbol = 'BTCUSD') {
       assert(symbol, 'symbol required.')
       return call.get('/v2/public/orderBook/L2', {
-        symbol
+        symbol,
       })
     },
-    listTickers(symbol = 'BTCUSD') {
-      return call.get('/v2/public/tickers', {symbol})
-    }
+    listTickers() {
+      return call.get('/v2/public/tickers')
+    },
+    getTicker(symbol) {
+      assert(symbol, 'symbol required')
+
+      return call.get('/v2/public/tickers').then(r => {
+        return r.find(d => d.symbol === symbol)
+      })
+    },
   }
 }
