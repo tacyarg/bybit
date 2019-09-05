@@ -64,8 +64,8 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
     symbol = 'BTCUSD',
     order_type = 'Limit',
     time_in_force = 'GoodTillCancel',
-    price = null,
-    qty = null,
+    price = null, // execution price
+    qty = null, // max 1M
   }) => {
     assert(price, 'price required.')
     assert(qty, 'qty required.')
@@ -73,24 +73,43 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
     return call.get('/order/create', params)
   }
 
+  const createConditionalOrder = ({
+    side = 'Buy',
+    symbol = 'BTCUSD',
+    order_type = 'Limit',
+    time_in_force = 'GoodTillCancel',
+    price = null, // Execution price
+    qty = null, // max 1M
+    base_price = null, // current market price
+    stop_px = null, // Trigger price
+  }) => {
+    assert(price, 'price required.')
+    assert(qty, 'qty required.')
+    assert(base_price, 'base_price required.')
+    assert(stop_px, 'stop_px required.')
+
+    return call.get('/stop-order/create', params)
+  }
+
   return {
     ...call,
-    listOrders(params) {
+    listActiveOrders(params) {
       //TODO
       return call.get('/order/list', params)
     },
-    getOrder(id) {
+    getActiveOrder(id, options ={}) {
       assert(id, 'id required')
 
       return call.get('/order/list', {
         order_id: id, 
-        order_link_id: id
+        order_link_id: id,
+        ...options
       }).then(r => {
         assert(r.data[0], 'invalid order id')
         return r.data[0]
       })
     },
-    cancelOrder(id) {
+    cancelActiveOrder(id) {
       assert(id, 'id required')
 
       return call.post('/order/cancel', {
@@ -134,5 +153,76 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
         order_type = 'Market',
       })
     },
+    createConditionalOrder,
+    listConditionalOrders(params) {
+      return call.get('/stop-order/list', params)
+    },
+    getConditionalOrder(id, options = {}) {
+      assert(id, 'id required')
+
+      return call.get('/stop-order/list', {
+        order_id: id, 
+        order_link_id: id,
+        ...options
+      }).then(r => {
+        assert(r.data[0], 'invalid order id')
+        return r.data[0]
+      })
+    },
+    cancelConditionalOrder(id) {
+      assert(id, 'id required')
+
+      return call.post('/stop-order/cancel', {
+        stop_order_id: id
+      })
+    },
+    listMyLeverage() {
+      return call.get('/user/leverage')
+    },
+    setMyLeverage(symbol, leverage) {
+      assert(symbol, 'symbol required.')
+      assert(leverage, 'leverage required.')
+
+      return call.post('/user/leverage/save', {
+        symbol, leverage
+      })
+    },
+    listMyPositions(){
+      return call.get('/position/list')
+    },
+    updatePositionMargin(symbol, margin) {
+      assert(symbol, 'symbol required.')
+      assert(margin, 'margin required.')
+
+      return call.post('/position/change-position-margin', {
+        symbol, margin
+      })
+    },
+    getFundingRate(symbol = 'BTCUSD') {
+      assert(symbol, 'symbol required.')
+      return call.get('/open-api/funding/prev-funding-rate', {symbol})
+    },
+    getMyFundingFee(symbol = 'BTCUSD') {
+      assert(symbol, 'symbol required.')
+      return call.get('/open-api/funding/prev-funding', {symbol})
+    },
+    getMyPredictedFunding(symbol = 'BTCUSD') {
+      assert(symbol, 'symbol required.')
+      return call.get('/open-api/funding/predicted-funding', {symbol})
+    },
+    listOrderTrades(id) {
+      assert(id, 'id required')
+
+      return call.get('/v2/private/execution/list', {order_id: id})
+    },
+    getOrderbookSnapshot(symbol = 'BTCUSD') {
+      assert(symbol, 'symbol required.')
+      return call.get('/v2/public/orderBook/L2', {
+        symbol
+      })
+    },
+    listTickers(symbol = 'BTCUSD') {
+      return call.get('/v2/public/tickers', {symbol})
+    }
   }
 }

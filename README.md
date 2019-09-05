@@ -1,10 +1,12 @@
 # Bybit
 
-Simple and easy to use bybit.com client.
+Simple and easy to use bybit API abstraction defined using the official documentation.
+
+> Official API Documentation: https://github.com/bybit-exchange/bybit-official-api-docs/blob/master/en/rest_api.md
 
 ## Initialize & Use
 
-Below is a short guide on how to use the root client.
+Below is a short guide on how to use the client.
 
 ### Register your APIKEY
 
@@ -39,35 +41,42 @@ client
 
 Methods provided by the client.
 
-### listOrders
+### listActiveOrders
 
-> List your orders.
+> List your Active orders.
+
+- `options` - Optional api params
 
 ```js
 client
-  .listOrders()
+  .listOrders([options])
   .then(console.log)
   .catch(console.error)
 ```
 
-### getOrder
+### getActiveOrder
 
-> Get a previously created order.
+> Get a previously created Active order.
+
+- `id` - Order ID. The unique order ID returned to you when the corresponding order was created.
+- `options` - Optional api params
 
 ```js
 client
-  .getOrder('order_id')
+  .getOrder(id, [options])
   .then(console.log)
   .catch(console.error)
 ```
 
-### cancelOrder
+### cancelActiveOrder
 
-> Canel a previously created order.
+> Canel a previously created Active order.
+
+- `id` - Order ID. The unique order ID returned to you when the corresponding order was created.
 
 ```js
 client
-  .cancelOrder('order_id')
+  .cancelOrder(id)
   .then(console.log)
   .catch(console.error)
 ```
@@ -96,10 +105,11 @@ client
 
 - `price` - Order Price
 - `qty` - Number of Contracts
+- `options` - Optional api params
 
 ```js
 client
-  .limitBuy(price, qty)
+  .limitBuy(price, qty, [options])
   .then(console.log)
   .catch(console.error)
 ```
@@ -110,10 +120,11 @@ client
 
 - `price` - Order Price
 - `qty` - Number of Contracts
+- `options` - Optional api params
 
 ```js
 client
-  .limitSell(price, qty)
+  .limitSell(price, qty, [options])
   .then(console.log)
   .catch(console.error)
 ```
@@ -123,10 +134,11 @@ client
 > Create a market buy order.
 
 - `qty` - Number of Contracts
+- `options` - Optional api params
 
 ```js
 client
-  .marketBuy(price, qty)
+  .marketBuy(qty, [options])
   .then(console.log)
   .catch(console.error)
 ```
@@ -136,10 +148,183 @@ client
 > Create a market sell order.
 
 - `qty` - Number of Contracts
+- `options` - Optional api params
 
 ```js
 client
-  .marketSell(price, qty)
+  .marketSell(qty, [options])
+  .then(console.log)
+  .catch(console.error)
+```
+
+### createConditionalOrder
+
+> Create a new order.
+
+- `options` - Optional api params
+
+```js
+client
+  .createConditionalOrder([options])
+  .then(console.log)
+  .catch(console.error)
+```
+
+### listConditionalOrders
+
+> List conditional orders.
+
+- `options` - Optional api params
+
+```js
+client
+  .listConditionalOrders([options])
+  .then(console.log)
+  .catch(console.error)
+```
+
+### getConditionalOrder
+
+> Get a previously created Conditional order.
+
+- `options` - Optional api params
+
+```js
+client
+  .getOrder('order_id', [options])
+  .then(console.log)
+  .catch(console.error)
+```
+
+### cancelConditionalOrder
+
+> Canel a previously created Conditional order.
+
+- `id` - Order ID. The unique order ID returned to you when the corresponding order was created.
+
+```js
+client
+  .cancelOrder(id)
+  .then(console.log)
+  .catch(console.error)
+```
+
+### listMyLeverage
+
+> List symbol leverage settings.
+
+```js
+client
+  .listMyLeverage()
+  .then(console.log)
+  .catch(console.error)
+```
+
+### setMyLeverage
+
+> Set symbol leverage setting.
+
+- `symbol` - Contract type
+- `leverage` - Leverage value
+
+```js
+client
+  .setMyLeverage(symbol, leverage)
+  .then(console.log)
+  .catch(console.error)
+```
+
+### listMyPositions
+> List your positions.
+
+```js
+client
+  .listMyPositions()
+  .then(console.log)
+  .catch(console.error)
+```
+
+### updatePoisitionMargin
+> Update position margin allocation.
+
+- `symbol` - Contract type
+- `margin` - margin value
+
+```js
+client
+  .updatePoisitionMargin(symbol, margin)
+  .then(console.log)
+  .catch(console.error)
+```
+
+### getFundingRate
+> Get the current funding rate.
+> Funding settlement occurs every 8 hours at 00:00 UTC, 08:00 UTC and 16:00 UTC
+
+- `symbol` - Contract type
+
+```js
+client
+  .getFundingRate(symbol)
+  .then(console.log)
+  .catch(console.error)
+```
+
+### getMyFundingFee
+> Get the provious funding fee.
+> Funding settlement occurs every 8 hours at 00:00 UTC, 08:00 UTC and 16:00 UTC
+
+- `symbol` - Contract type
+
+```js
+client
+  .getMyFundingFee(symbol)
+  .then(console.log)
+  .catch(console.error)
+```
+
+### getMyPredictedFunding
+> Get your predictied funding rate and fee.
+
+- `symbol` - Contract type
+
+```js
+client
+  .getMyPredictedFunding(symbol)
+  .then(console.log)
+  .catch(console.error)
+```
+
+### listOrderTrades
+> List trades placed to fill and order.
+
+- `id` - order id
+
+```js
+client
+  .listOrderTrades(symbol)
+  .then(console.log)
+  .catch(console.error)
+```
+
+### getOrderbookSnapshot
+> Get the current state of the orderbook.
+
+- `symbol` - Contract type
+
+```js
+client
+  .getOrderbookSnapshot(symbol)
+  .then(console.log)
+  .catch(console.error)
+```
+
+### listTickers
+> List all available ticker data. ( price, ect... )
+
+```js
+client
+  .listTickers()
   .then(console.log)
   .catch(console.error)
 ```
