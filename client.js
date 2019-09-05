@@ -230,7 +230,7 @@ module.exports = ({ key, secret, baseURL = 'https://api.bybit.com' }) => {
     listTickers() {
       return call.get('/v2/public/tickers')
     },
-    getTicker(symbol) {
+    getTicker(symbol = 'BTCUSD') {
       assert(symbol, 'symbol required')
 
       return call.get('/v2/public/tickers').then(r => {

@@ -328,3 +328,15 @@ client
   .then(console.log)
   .catch(console.error)
 ```
+
+### getTicker
+> get current ticker data.
+
+- `symbol` - Contract type
+
+```js
+client
+  .listTickers(symbol)
+  .then(console.log)
+  .catch(console.error)
+```

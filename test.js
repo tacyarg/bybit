@@ -5,6 +5,6 @@ const api = require('.')(config.bybit)
 const assert = require('assert')
 
 api
-  .listTickers()
+  .getTicker()
   .then(console.log)
   .catch(console.error)
