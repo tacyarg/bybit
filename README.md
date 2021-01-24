@@ -244,7 +244,7 @@ client
   .catch(console.error)
 ```
 
-### updatePoisitionMargin
+### updatePositionMargin
 > Update position margin allocation.
 
 - `symbol` - Contract type
@@ -252,7 +252,7 @@ client
 
 ```js
 client
-  .updatePoisitionMargin(symbol, margin)
+  .updatePositionMargin(symbol, margin)
   .then(console.log)
   .catch(console.error)
 ```
